@@ -1,0 +1,21 @@
+#+title: Wordle Tools
+#+description: Practicing with racket-lang with wordle as a canvas
+#+author: jcottrell
+
+#+export_file_name: ../readme.md
+# C-c C-e m m to export to markdown
+
+* Wordle Tools
+Playing with wordle as practice for real life.
+** Short list of tools
++ Answer finder for _today_: pull the list of answers and get today's
+** Potential future tools
++ Answer finder for any day.
++ Browser bookmarklet connection to server to help players stay away from mistakenly re-using letters or spaces when they don't want to.
++ Create your own wordle-esque site with just enough differences for legal separation.
++ Add API for allow others to pull words.
++ Add text-message capability.
+** TODO
++ Keep everything in racket to practice app, website, api, etc. design and patterns.
++ Add a database to keep from hitting the website.
++ Create a UI/UX interface via an app and also a website.
