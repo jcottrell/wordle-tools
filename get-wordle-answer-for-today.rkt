@@ -2,7 +2,7 @@
 
 (require threading
          racket/date
-         "./wordle-lib.rkt")
+         "./libs/wordle-lib.rkt")
 
 (~> (current-date)
     get-wordle-day-number
