@@ -1,13 +1,26 @@
 #lang racket
 
-(provide get-wordle-js-source-url-from-wordle-page
-         get-js-page-string
-         parse-into-wordle-list)
+(provide get-wordle-list)
 
 (require (planet neil/html-parsing:2:0) ; html->xexp
          net/url     ; get-pure-port
          threading   ; ~> and ~>>
-         racket/port); port->string
+         racket/port ; port->string
+         "./storage/storage-interface.rkt")
+
+(define (get-wordle-list wordle-page-url)
+  (let ([cached-list (retrieve-list 'wordle-answers-list)])
+    (if (not (null? cached-list))
+        cached-list
+        (store-list 'wordle-answers-list
+                    (get-latest-wordle-list wordle-page-url)))))
+
+(define (get-latest-wordle-list wordle-page-url)
+  (~> wordle-page-url
+      get-wordle-js-source-url-from-wordle-page
+      first
+      get-js-page-string
+      parse-into-wordle-list))
 
 ;(get-wordle-js-source-url-from-wordle-page "https://www.nytimes.com/games/wordle/index.html")
 (define (get-wordle-js-source-url-from-wordle-page url-of-page)
@@ -24,6 +37,10 @@
       port->string))
 
 (define (parse-into-wordle-list page-string)
+  ;; TODO
+  ;; aahed is the start of the other word list (all possible words?). This
+  ;; function should be largely duplicated (and DRY'd) and return the possible
+  ;; words
   (let ([raw-js-array (regexp-match #rx"=\\[(\\\"cigar\\\".*?)\\]" page-string)])
     (cond [(not raw-js-array) '()]
           [else (~> (second raw-js-array)

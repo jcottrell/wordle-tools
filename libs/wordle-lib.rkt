@@ -1,30 +1,20 @@
 #lang racket
 
-(provide get-wordle-day-number
-         get-wordle-list)
+(provide date-string->wordle-day
+         get-wordle-answer-for)
 
 (require threading   ; ~> and ~>>
-         racket/date ; date struct
+         "./wordle-date.rkt"
          "./wordle-list.rkt")
 
-;; Wordle day support
+(define wordle-answers-key 'wordle-answers-list)
 
-(define (get-wordle-day-number date-of-day)
-  (let ([wordle-start-date (date 0 0 0 18 6 2021 0 0 #f 0)])
-    (~> (- (date->seconds date-of-day)
-           (date->seconds wordle-start-date))
-        (/ _ 60)
-        (/ _ 60)
-        (/ _ 24)
-        floor)))
+(define (get-wordle-answer-for wordle-page-url wordle-day)
+  (vector-ref (wordle-page-url->wordle-answers wordle-page-url)
+              wordle-day))
 
-;; Wordle web scraping support for list retrieval
-
-(define (get-wordle-list wordle-page-url)
+(define (wordle-page-url->wordle-answers wordle-page-url)
   (~> wordle-page-url
-      get-wordle-js-source-url-from-wordle-page
-      first
-      get-js-page-string
-      parse-into-wordle-list
+      get-wordle-list
       list->vector
       vector->immutable-vector))

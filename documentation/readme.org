@@ -8,23 +8,25 @@
 * Wordle Tools
 Playing with wordle as practice for real life.
 ** Short list of tools
-+ Answer finder for _today_: pull the list of answers and get today's
-+ Answer finder for arbitrary date: pass in the date at the command line in year-month-day format and receive the wordle word for that day
++ Answer finder for _today_ or any arbitrary date: pull the list of answers and get the requested answer (nothing passed in means _today_, arbitrary dates should have the form yyyy-mm-dd)
 ** Running the tools
 + With Racket installed...
 + Run with
-  =racket get-wordle-for-today.rkt=
+  =racket get-wordle-answer.rkt=
   or
-  =racket get-wordle-for.rkt "2022-08-01"=
-+ Or compile with =raco exe get-wordle-answer-for.rkt= then run with =./get-wordle-answer-for "2022-08-01"=
+  =racket get-wordle-answer.rkt "2022-08-01"=
++ Or compile with =raco exe get-wordle-answer.rkt= then run with =./get-wordle-answer "2022-08-01"=
 ** Potential future tools
 + Check whether a word has already been used (and when).
 + GUI tools (for answer finders).
 + Browser bookmarklet connection to server to help players stay away from mistakenly re-using letters or spaces when they don't want to.
++ Auto-guesser that will allow developers to add their own set of specially named functions to guess answers, essentially allowing them to test their own play strategies.
 + Create your own wordle-esque site with just enough differences for legal separation.
+** TODONEs
++ Added storage interface (rudimentary) and implemented it in with file storage first.
 ** TODO
 + Keep everything in racket to practice app, website, api, etc. design and patterns.
-+ Add a database to keep from hitting the website.
++ Implement storage interface with database storage.
 + Create a UI/UX interface via an app and also a website.
 + Make each tool distributable.
 + Add API for allow others to pull words.
