@@ -17,26 +17,26 @@
 
 (define (get-latest-wordle-list wordle-page-url)
   (~> wordle-page-url
-      get-wordle-js-source-url-from-wordle-page
+      wordle-page-url->wordle-js-sources
       first
-      get-js-page-string
-      parse-into-wordle-list))
+      url->page-string
+      page-string->wordle-list))
 
-;(get-wordle-js-source-url-from-wordle-page "https://www.nytimes.com/games/wordle/index.html")
-(define (get-wordle-js-source-url-from-wordle-page url-of-page)
+;(wordle-page-url->wordle-js-sources "https://www.nytimes.com/games/wordle/index.html")
+(define (wordle-page-url->wordle-js-sources url-of-page)
   (~> url-of-page
-      get-html-xexp-from-url
+      url->html-xexp
       get-js-source-attributes
-      get-js-sources-from-attributes
-      get-wordle-url-from-urls))
+      attributes->js-sources
+      urls->wordle-url))
 
-(define (get-js-page-string url-of-page)
+(define (url->page-string url-of-page)
   (~> url-of-page
       string->url
       get-pure-port
       port->string))
 
-(define (parse-into-wordle-list page-string)
+(define (page-string->wordle-list page-string)
   ;; TODO
   ;; aahed is the start of the other word list (all possible words?). This
   ;; function should be largely duplicated (and DRY'd) and return the possible
@@ -48,9 +48,9 @@
                     (string-split _ ",")
                     (cons "BW - before wordle (for indexing)" _))])))
 
-;;;; get-wordle-js-source-url-from-wordle-page support functions
+;;;; wordle-page-url->wordle-js-sources support functions
 
-(define (get-html-xexp-from-url url)
+(define (url->html-xexp url)
   (~> url
       string->url
       get-pure-port
@@ -58,7 +58,19 @@
 
 (define (get-js-source-attributes html-xexp)
   (filter has-js-sources
-        (rest (fourth (third (cdr html-xexp))))))
+          (parents->children '(*TOP* html body) html-xexp)))
+
+(define (parents->children lineage-path parents)
+  (cond [(null? lineage-path)         parents]
+        [(null? parents)              '()]
+        [(eq? (car lineage-path)
+              (car parents))          (parents->children (cdr lineage-path)
+                                                         (cdr parents))]
+        [(and (list? (car parents))
+              (eq? (car lineage-path)
+                   (caar parents)))   (parents->children (cdr  lineage-path)
+                                                         (cdar parents))]
+        [else (parents->children lineage-path (cdr parents))]))
 
 (define (has-js-sources child)
   (let* ([tag        (car child)]
@@ -69,13 +81,13 @@
          attributes
          has-source)))
 
-(define (get-js-sources-from-attributes source-attributes)
+(define (attributes->js-sources source-attributes)
   (map (lambda (source) (second (third source)))
        (filter (lambda (attribute)
-                        (member 'src (map first attribute)))
-                      (map cdadr source-attributes))))
+                 (member 'src (map first attribute)))
+               (map cdadr source-attributes))))
 
-(define (get-wordle-url-from-urls urls)
+(define (urls->wordle-url urls)
   (filter (lambda (url)
             (string-contains? url "wordle"))
           urls))
