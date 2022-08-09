@@ -9,15 +9,15 @@
 Playing with wordle as practice for real life.
 ** Short list of tools
 + Answer finder for _today_ or any arbitrary date: pull the list of answers and get the requested answer (nothing passed in means _today_, arbitrary dates should have the form yyyy-mm-dd)
++ Answer searcher to lookup words that have or will appear as wordle answers. It gives the date and wordle day of when the answer has or will appear.
 ** Running the tools
 + With Racket installed...
 + Run with
   =racket get-wordle-answer.rkt=
   or
   =racket get-wordle-answer.rkt "2022-08-01"=
-+ Or compile with =raco exe get-wordle-answer.rkt= then run with =./get-wordle-answer "2022-08-01"=
++ Or compile with =raco exe search-answers.rkt= then run with =./search-answers cigar=
 ** Potential future tools
-+ Check whether a word has already been used (and when).
 + GUI tools (for answer finders).
 + Browser bookmarklet connection to server to help players stay away from mistakenly re-using letters or spaces when they don't want to.
 + Auto-guesser that will allow developers to add their own set of specially named functions to guess answers, essentially allowing them to test their own play strategies.

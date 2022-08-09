@@ -18,5 +18,4 @@
      (displayln (string-append "Wordle answer for "
                                display-date
                                " (" (number->string wordle-day) "): "
-                               (get-wordle-answer-for "https://www.nytimes.com/games/wordle/index.html"
-                                                      wordle-day))))))
+                               (wordle-day->wordle-answer wordle-day))))))
