@@ -43,12 +43,14 @@
   ;; aahed is the start of the other word list (all possible words?). This
   ;; function should be largely duplicated (and DRY'd) and return the possible
   ;; words
-  (let ([raw-js-array (regexp-match #rx"=\\[(\\\"cigar\\\".*?)\\]" page-string)])
+  (let ([raw-js-array (regexp-match #rx"=\\[.*?(\\\"cigar\\\".*?)\\]" page-string)])
     (cond [(not raw-js-array) '()]
           [else (~> (second raw-js-array)
                     (string-replace _ "\"" "")
                     (string-split _ ",")
                     (cons "BW - before wordle (for indexing)" _))])))
+
+;(page-string->wordle-list "Zn=[\"aahed\",\"aalii\",\"aapas\",\"aargh\",\"aarti\",\"abaca\",\"cigar\",\"rebut\",\"sissy\"]; var Xn")
 
 ;;;; wordle-page-url->wordle-js-sources support functions
 
