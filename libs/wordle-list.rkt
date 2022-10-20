@@ -14,6 +14,7 @@
         cached-list
         (store-list 'wordle-answers-list
                     (get-latest-wordle-list wordle-page-url)))))
+;(get-wordle-list "https://www.nytimes.com/games/wordle/index.html")
 
 (define (get-latest-wordle-list wordle-page-url)
   (~> wordle-page-url
@@ -22,13 +23,14 @@
       url->page-string
       page-string->wordle-list))
 
-;(wordle-page-url->wordle-js-sources "https://www.nytimes.com/games/wordle/index.html")
 (define (wordle-page-url->wordle-js-sources url-of-page)
   (~> url-of-page
       url->html-xexp
       get-js-source-attributes
       attributes->js-sources
       urls->wordle-url))
+
+;(wordle-page-url->wordle-js-sources "https://www.nytimes.com/games/wordle/index.html")
 
 (define (url->page-string url-of-page)
   (~> url-of-page
